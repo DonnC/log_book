@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+
+import 'package:log_book/services/index.dart';
 
 class AppDatabase {
   // singleton instance
@@ -38,19 +41,23 @@ class AppDatabase {
 
     final appDocumentDir = await _provider.getApplicationSupportPath();
 
-    print('[INFO] Windows application support path: $appDocumentDir');
+    var currentDir = Directory.current;
+
+    print(
+        '[INFO] Windows application support path: $appDocumentDir | currentDir: ${currentDir.path}');
 
     // path with the form: //platform-specific-directory/logbook.db
     final dbPath = join(appDocumentDir, 'logbook.db');
 
     //TODO: database encryption
     //final _edc =  EncryptionDatabaseCodec(); // to check if encryption is enabled globally
-    //var codec = getEncryptSembastCodec(); // for internal database encryption
+    var codec = getEncryptSembastCodec(); // for internal database encryption
     //final database = await databaseFactoryIo.openDatabase(dbPath, codec: codec);
     //
     // TODO: consider database migration here
     final database = await databaseFactoryIo.openDatabase(
       dbPath,
+      // codec: codec,
       onVersionChanged: (db, oldVersion, newVersion) async {
         // migrate old db to new db
         print('=== old version: $oldVersion | new version: $newVersion');

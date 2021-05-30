@@ -1,5 +1,6 @@
 // entry of formbuilderfield
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:log_book/utils/index.dart';
 import 'package:relative_scale/relative_scale.dart';
 
@@ -17,6 +18,8 @@ Widget formEntryField({
   bool readOnly: false,
   bool unfocus: false,
   Color titleColor,
+  bool enforceMaxLength: false,
+  int maxLength,
   var customOnChangeCallback,
 
   /// determine if this is a custom phone input field or general textfield. Text by default
@@ -49,6 +52,8 @@ Widget formEntryField({
               suffixIcon: suffixIcon,
               initialText: initialText,
               customOnChangeCallback: customOnChangeCallback,
+              enforceMaxLength: enforceMaxLength,
+              maxLength: maxLength,
             ),
           ],
         ),
@@ -69,6 +74,8 @@ Widget customTextField({
   String labelText: '',
   bool autoFocus: false,
   var customOnChangeCallback,
+  bool enforceMaxLength: false,
+  int maxLength,
   String errorString: 'this field is required',
   Widget suffixIcon: const SizedBox.shrink(),
 }) {
@@ -87,6 +94,10 @@ Widget customTextField({
         autofocus: autoFocus,
         style: kStyle(),
         maxLines: maxLines,
+        maxLength: maxLength,
+        maxLengthEnforcement: enforceMaxLength
+            ? MaxLengthEnforcement.enforced
+            : MaxLengthEnforcement.none,
         obscureText: obscureText,
         validator: (value) {
           if (value.isEmpty) {

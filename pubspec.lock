@@ -35,7 +35,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.1"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -205,13 +205,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
-  linked_scroll_controller:
-    dependency: transitive
-    description:
-      name: linked_scroll_controller
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   matcher:
     dependency: transitive
     description:
@@ -296,27 +289,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  pluto_filtered_list:
-    dependency: transitive
-    description:
-      name: pluto_filtered_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
-  pluto_grid:
-    dependency: "direct main"
-    description:
-      name: pluto_grid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
-  pluto_inside:
-    dependency: transitive
-    description:
-      name: pluto_inside
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   pointycastle:
     dependency: transitive
     description:
@@ -345,13 +317,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.25.0"
   sembast:
     dependency: "direct main"
     description:
@@ -384,7 +349,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   stack_trace:
     dependency: transitive
     description:
@@ -426,7 +391,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:

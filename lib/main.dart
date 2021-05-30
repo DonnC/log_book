@@ -35,10 +35,12 @@ Momentum momentum() => Momentum(
         return result[key];
       },
       controllers: [
-        HomeViewController(),
+        HomeViewController()..config(lazy: true),
+        PdfPrinterViewController()..config(lazy: true),
       ],
       services: [
         DialogService(),
+        AppService(),
         MomentumRouter(
           [
             SplashView(),

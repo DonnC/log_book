@@ -35,7 +35,6 @@ dependencies:
   path_provider_windows: ^2.0.1
   shared_preferences_windows: ^2.0.0
   intl: ^0.16.1
-  pluto_grid: ^1.1.0
   relative_scale: ^1.1.2
   animate_do: ^1.7.4
   date_format: ^1.0.9

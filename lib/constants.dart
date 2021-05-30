@@ -4,7 +4,25 @@
 // a random num generator
 import 'dart:math';
 
+const String version = 'v1.0.0';
+
 final Random _random = Random();
+
+/// sidebar signal
+enum SideBarSignal {
+  None,
+  AddTodo,
+  AddLogBook,
+  EditLogBook,
+  ViewLogBook,
+}
+
+/// view mode on home screen
+enum ViewMode {
+  None,
+  List,
+  Grid,
+}
 
 /// general response action
 enum ResponseAction {
@@ -20,8 +38,16 @@ enum ResponseEventAction {
   Success,
   Fail,
   Error,
-  DeleteRecord,
+  DeleteTodo,
+  DeleteLogEntry,
 }
+
+const String logHintText = """
+- Introduced to the Log Book platform
+- Learnt how to use Log Book app to add my workdone
+- Initial introduction to Industrial Processes
+- Participated in group work with other interns,
+""";
 
 class EncryptionDatabaseCodec {
   // system wide encryption and decryption key

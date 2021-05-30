@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:relative_scale/relative_scale.dart';
 
+import 'package:log_book/constants.dart';
 import 'package:log_book/widgets/index.dart';
 
 import 'index.dart';
@@ -92,8 +93,47 @@ class _SplashViewState extends MomentumState<SplashView> {
                   ),
                   Spacer(),
                   Padding(
-                    padding: EdgeInsets.all(sy(30)),
+                    padding: EdgeInsets.only(bottom: 50),
                     child: customLoader(loaderType: 3, loaderText: ''),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 8, right: 30, left: 30),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AutoSizeText(
+                            '@2021',
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            presetFontSizes: [15, 13, 11, 8],
+                          ),
+                          AutoSizeText(
+                            '©DonnC Lab',
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            presetFontSizes: [15, 13, 11, 8],
+                          ),
+                          AutoSizeText(
+                            version,
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            presetFontSizes: [15, 13, 11, 8],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

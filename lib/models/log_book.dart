@@ -5,7 +5,7 @@ import 'package:sembast/timestamp.dart';
 /// main logbook class
 class LogBook {
   int id; // auto incremented, used by sembast db
-  final String workdone;
+  String workdone;
   final Timestamp date;
 
   LogBook({

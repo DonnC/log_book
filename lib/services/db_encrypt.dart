@@ -2,18 +2,17 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-/*
-
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:log_book/constants.dart';
 import 'package:sembast/src/api/v2/sembast.dart';
-
 
 var _random = Random.secure();
 
 /// Random bytes generator
 Uint8List _randBytes(int length) {
-  return Uint8List.fromList(List<int>.generate(length, (i) => _random.nextInt(256)));
+  return Uint8List.fromList(
+      List<int>.generate(length, (i) => _random.nextInt(256)));
 }
 
 Uint8List _generateEncryptPassword(String password) {
@@ -33,7 +32,8 @@ class _EncryptEncoder extends Converter<dynamic, String> {
     final ivEncoded = base64.encode(iv);
     assert(ivEncoded.length == 12);
 
-    final encoded = Encrypter(salsa20).encrypt(json.encode(input), iv: IV(iv)).base64;
+    final encoded =
+        Encrypter(salsa20).encrypt(json.encode(input), iv: IV(iv)).base64;
 
     return '$ivEncoded$encoded';
   }
@@ -88,4 +88,3 @@ SembastCodec getEncryptSembastCodec() {
     ),
   );
 }
-*/

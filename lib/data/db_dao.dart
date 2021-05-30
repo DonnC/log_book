@@ -48,10 +48,10 @@ class Dao {
   }
 
   /// get all logbooks
-  Future<List<LogBook>> getAllLogBooks() async {
+  Future<List<LogBook>> getAllLogBooks({bool descendSort: false}) async {
     final finder = Finder(
       sortOrders: [
-        SortOrder('date', false),
+        SortOrder('date', descendSort),
       ],
     );
 
