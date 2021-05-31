@@ -1,12 +1,7 @@
 // constants and enums
 // DonnC
 
-// a random num generator
-import 'dart:math';
-
-const String version = 'v2.0.0';
-
-final Random _random = Random();
+const String version = 'v3.0.0';
 
 /// sidebar signal
 enum SideBarSignal {

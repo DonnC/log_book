@@ -132,7 +132,7 @@ class DialogService extends MomentumService {
           enableDrag: true,
           child: FlashBar(
             icon: Icon(
-              Icons.delete,
+              Icons.info,
               color: textColor,
             ),
             shouldIconPulse: false,
