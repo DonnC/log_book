@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:momentum/momentum.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -8,6 +9,9 @@ import 'package:printing/printing.dart';
 import 'package:relative_scale/relative_scale.dart';
 
 import 'package:log_book/components/index.dart';
+import 'package:log_book/constants.dart';
+import 'package:log_book/services/index.dart';
+import 'package:log_book/utils/index.dart';
 import 'package:log_book/widgets/index.dart';
 
 class PdfGenView extends StatelessWidget {
@@ -19,17 +23,11 @@ class PdfGenView extends StatelessWidget {
     ];
 
     return pw.Table.fromTextArray(
-      // border: null,
       cellAlignment: pw.Alignment.centerLeft,
-      //headerDecoration: pw.BoxDecoration(
-      //  color: baseColor,
-      //),
-      //headerHeight: 25,
-      //cellHeight: 40,
       columnWidths: {
-        0: pw.FixedColumnWidth(70.0), // fixed to 100 width
+        0: pw.FixedColumnWidth(70.0),
         1: pw.FlexColumnWidth(),
-        2: pw.FixedColumnWidth(80.0), //fixed to 100 width
+        2: pw.FixedColumnWidth(80.0),
       },
       cellAlignments: {
         0: pw.Alignment.center,
@@ -42,12 +40,10 @@ class PdfGenView extends StatelessWidget {
         2: pw.Alignment.center,
       },
       headerStyle: pw.TextStyle(
-        //color: _baseTextColor,
         fontSize: 10,
         fontWeight: pw.FontWeight.bold,
       ),
       cellStyle: const pw.TextStyle(
-        // color: _darkColor,
         fontSize: 10,
       ),
       rowDecoration: pw.BoxDecoration(
@@ -88,6 +84,57 @@ class PdfGenView extends StatelessWidget {
               ),
               onPressed: () => MomentumRouter.pop(context),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: IconButton(
+                  tooltip: 'save log book as .pdf to disk',
+                  splashRadius: 5,
+                  hoverColor: secondaryColor,
+                  icon: Icon(FontAwesome.file_pdf_o),
+                  onPressed: () {
+                    final dialogService =
+                        Momentum.service<DialogService>(context);
+                    final bytes =
+                        Momentum.controller<PdfPrinterViewController>(context)
+                            .model
+                            ?.logBookData;
+
+                    if (bytes != null) {
+                      Momentum.service<AppService>(context)
+                          .savePdfToDisk(bytes)
+                          .then((value) {
+                        switch (value.action) {
+                          case ResponseAction.Success:
+                            dialogService.showFlashInfoDialog(
+                              context,
+                              value.message,
+                              'LogBook',
+                            );
+
+                            break;
+                          default:
+                            dialogService.showFlashInfoDialog(
+                              context,
+                              value.message,
+                              'LogBook',
+                            );
+                        }
+                      });
+                    }
+
+                    // show prompt
+                    else {
+                      dialogService.showFlashBar(
+                        context,
+                        'no generated log book data found for saving',
+                        'LogBook',
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
           body: RelativeBuilder(builder: (context, height, width, sy, sx) {
             return MomentumBuilder(
@@ -105,8 +152,13 @@ class PdfGenView extends StatelessWidget {
                         )
                       : PdfPreview(
                           allowSharing: false,
-                          build: (format) =>
-                              _generatePdf(format, model.logBookEntries),
+                          build: (format) async {
+                            final _data =
+                                _generatePdf(format, model.logBookEntries);
+                            var logData = await _data;
+                            model.update(logBookData: logData);
+                            return _data;
+                          },
                         );
                 });
           }),

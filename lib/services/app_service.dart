@@ -1,7 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:intl/intl.dart';
+import 'package:momentum/momentum.dart';
+import 'package:path/path.dart';
+import 'package:path_provider_windows/path_provider_windows.dart';
+
 import 'package:log_book/constants.dart';
 import 'package:log_book/data/index.dart';
 import 'package:log_book/models/index.dart';
-import 'package:momentum/momentum.dart';
 
 // service class to perform CRUD operations against sembast db
 // @DonnC
@@ -10,6 +17,45 @@ import 'package:momentum/momentum.dart';
 /// main app service that performs business logic
 class AppService extends MomentumService {
   static final Dao _dao = Dao();
+
+  Future<AppResponse> savePdfToDisk(Uint8List data) async {
+    final PathProviderWindows _provider = PathProviderWindows();
+    final format = DateFormat('dd-M-yyyy_HH.mm.ss', 'en_US');
+
+    String _time = format.format(DateTime.now());
+
+    try {
+      final String fileName = 'logbook $_time.pdf';
+
+      final appDocumentDir = await _provider.getApplicationDocumentsPath();
+
+      final String _subDir = 'LogBook';
+      final String _logBkDir = join(appDocumentDir, _subDir);
+
+      File log = File(join(_logBkDir, fileName));
+
+      log.createSync(recursive: true);
+
+      print(log.path);
+      final _output = await log.writeAsBytes(data);
+
+      // write contents to pdf file
+      return AppResponse(
+        data: _output.path,
+        action: ResponseAction.Success,
+        message: 'log book saved to ${_output.path}',
+      );
+    }
+
+    // catch error, if any
+    catch (e) {
+      print(e.toString());
+      return AppResponse(
+        action: ResponseAction.Error,
+        message: e.toString(),
+      );
+    }
+  }
 
   Future<AppResponse> getTodos() async {
     try {

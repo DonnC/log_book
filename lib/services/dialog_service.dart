@@ -113,6 +113,57 @@ class DialogService extends MomentumService {
     );
   }
 
+  Future<void> showFlashInfoDialog(
+      BuildContext context, String info, String title) async {
+    await showFlash(
+      context: context,
+      //persistent: false,
+      builder: (context, controller) {
+        return Flash.bar(
+          controller: controller,
+          backgroundGradient: LinearGradient(
+            colors: [bgColor, secondaryColor],
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          margin: const EdgeInsets.all(8),
+          forwardAnimationCurve: Curves.easeOutBack,
+          reverseAnimationCurve: Curves.slowMiddle,
+          position: FlashPosition.bottom,
+          enableDrag: true,
+          child: FlashBar(
+            icon: Icon(
+              Icons.delete,
+              color: textColor,
+            ),
+            shouldIconPulse: false,
+            showProgressIndicator: true,
+            message: Text(
+              info,
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  controller.dismiss();
+                },
+                child: Text('CANCEL'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Future<bool> showFlashDialogConfirm(
       BuildContext context, String info, String title) async {
     var res = showFlash<bool>(
