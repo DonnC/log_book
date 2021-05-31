@@ -15,10 +15,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  #sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.11.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -38,12 +39,20 @@ dependencies:
   relative_scale: ^1.1.2
   animate_do: ^1.7.4
   date_format: ^1.0.9
-  desktop_window: ^0.3.0
   printing: ^5.2.1
   pdf: ^3.3.0
   flash: ^1.5.2
   auto_size_text: ^2.1.0
   flutter_spinkit: ^5.0.0
+  overflow_view: ^0.3.1
+
+  #window_size:
+  #  git:
+  #    url: git://github.com/google/flutter-desktop-embedding.git
+  #    path: plugins/window_size
+  #    ref: 927f8cbc09b35d85245c095f2db8df9b186f6618
+
+  bitsdojo_window: ^0.1.0+1
 
   # db encryption
   encrypt: '>=5.0.0-0'

@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  desktop_window
+  bitsdojo_window_windows
   printing
 )
 

@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:shared_preferences_windows/shared_preferences_windows.dart';
@@ -16,6 +17,18 @@ void main() async {
   // to avoid persisting views with issues
   await sharedPref.clear();
   runApp(momentum());
+
+  doWhenWindowReady(() {
+    final win = appWindow;
+
+    final initialSize = Size(900, 680);
+    win.minSize = initialSize;
+    win.size = initialSize;
+    win.alignment = Alignment.center;
+    win.title = "LogBook";
+    //win.maximize();
+    win.show();
+  });
 }
 
 Momentum momentum() => Momentum(
@@ -57,7 +70,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'LogBook',
         theme: colorTheme,
-        home: MomentumRouter.getActivePage(context),
-        //home: PdfGenView(),
+        home: Scaffold(
+          body: WindowBorder(
+            color: borderColor,
+            width: 3,
+            child: MomentumRouter.getActivePage(context),
+          ),
+        ),
       );
 }

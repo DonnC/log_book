@@ -1,10 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:momentum/momentum.dart';
+import 'package:overflow_view/overflow_view.dart';
 import 'package:relative_scale/relative_scale.dart';
 
 import 'package:log_book/components/index.dart';
@@ -98,197 +100,151 @@ class _HomeViewState extends MomentumState<HomeView> {
       child: SafeArea(
         child: RelativeBuilder(
           builder: (context, height, width, sy, sx) {
-            return Scaffold(
-              body: MomentumBuilder(
-                controllers: [HomeViewController],
-                builder: (context, snapshot) {
-                  final model = snapshot<HomeViewModel>();
+            return CustomAppBar(
+              child: Scaffold(
+                body: MomentumBuilder(
+                  controllers: [HomeViewController],
+                  builder: (context, snapshot) {
+                    final model = snapshot<HomeViewModel>();
 
-                  return model.loading
-                      ? Center(
-                          // TODO: Add shimmer loader
-                          child: customLoader(
-                            heightFromTop: height * 0.3,
-                            loaderType: 1,
-                            loaderText: 'loading..',
-                          ),
-                        )
-                      // TODO: Use slivers
-                      : SingleChildScrollView(
-                          padding: EdgeInsets.all(sy(13)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: model.sideBarSignal == SideBarSignal.None
-                                    ? 1
-                                    : 5,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                    return model.loading
+                        ? Center(
+                            // TODO: Add shimmer loader
+                            child: customLoader(
+                              heightFromTop: height * 0.3,
+                              loaderType: 1,
+                              loaderText: 'loading..',
+                            ),
+                          )
+                        // TODO: Use slivers
+                        : SingleChildScrollView(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: sy(13),
+                                vertical: 5,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: model.sideBarSignal ==
+                                            SideBarSignal.None
+                                        ? 1
+                                        : 5,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Dashboard',
-                                          style: kStyle(
-                                            size: sy(25),
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        SlideInDown(
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.blue,
-                                              minimumSize: Size(
-                                                sy(80),
-                                                sy(50),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Dashboard',
+                                              style: kStyle(
+                                                size: sy(25),
+                                                color: Colors.white,
                                               ),
                                             ),
-                                            onPressed: () async {
-                                              await model.controller.loadAll();
-                                            },
-                                            icon: Icon(Feather.refresh_ccw),
-                                            label: Text(
-                                              'Refresh',
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 20),
-                                        SlideInDown(
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: model.logBooks.isEmpty
-                                                  ? Colors.grey
-                                                  : Colors.blue,
-                                              minimumSize: Size(
-                                                sy(80),
-                                                sy(50),
+                                            Spacer(),
+                                            SlideInDown(
+                                              child: ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors.blue,
+                                                  minimumSize: Size(
+                                                    sy(80),
+                                                    sy(50),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  await model.controller
+                                                      .loadAll();
+                                                },
+                                                icon: Icon(Feather.refresh_ccw),
+                                                label: Text(
+                                                  'Refresh',
+                                                ),
                                               ),
                                             ),
-                                            onPressed: () {
-                                              if (model.logBooks.isEmpty) {
-                                                // avoid printing
-                                              }
+                                            SizedBox(width: 20),
+                                            SlideInDown(
+                                              child: ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary:
+                                                      model.logBooks.isEmpty
+                                                          ? Colors.grey
+                                                          : Colors.blue,
+                                                  minimumSize: Size(
+                                                    sy(80),
+                                                    sy(50),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  if (model.logBooks.isEmpty) {
+                                                    // avoid printing
+                                                  }
 
-                                              // else do it
-                                              else {
-                                                MomentumRouter.goto(
-                                                    context, PdfGenView);
-                                              }
-                                            },
-                                            icon: Icon(Feather.printer),
-                                            label: Text(
-                                              'Print LogBook',
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: sy(40)),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'My TODOs',
-                                          style: kStyle(
-                                            size: sy(25),
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        ZoomIn(
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.blue,
-                                              minimumSize: Size(
-                                                sy(80),
-                                                sy(40),
+                                                  // else do it
+                                                  else {
+                                                    MomentumRouter.goto(
+                                                        context, PdfGenView);
+                                                  }
+                                                },
+                                                icon: Icon(Feather.printer),
+                                                label: Text(
+                                                  'Print LogBook',
+                                                ),
                                               ),
                                             ),
-                                            onPressed: () {
-                                              model.update(
-                                                  sideBarSignal:
-                                                      SideBarSignal.AddTodo);
-                                            },
-                                            icon: Icon(AntDesign.addfile),
-                                            label: Text(
-                                              'New ToDo',
-                                            ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10),
-                                    Container(
-                                      height: sy(125),
-                                      child: model.todos.isEmpty
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: InkWell(
-                                                onTap: () {
+                                        SizedBox(height: sy(40)),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'My TODOs',
+                                              style: kStyle(
+                                                size: sy(25),
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            ZoomIn(
+                                              child: ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors.blue,
+                                                  minimumSize: Size(
+                                                    sy(80),
+                                                    sy(40),
+                                                  ),
+                                                ),
+                                                onPressed: () {
                                                   model.update(
                                                       sideBarSignal:
                                                           SideBarSignal
                                                               .AddTodo);
                                                 },
-                                                child: Container(
-                                                  //  height: sy(120),
-                                                  width: sy(180),
-                                                  padding: EdgeInsets.all(
-                                                      defaultPadding),
-                                                  decoration: BoxDecoration(
-                                                    color: secondaryColor,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                10)),
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Center(
-                                                          child: Icon(
-                                                            AntDesign
-                                                                .pluscircle,
-                                                            color: textColor,
-                                                            size: sy(40),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 30),
-                                                      Center(
-                                                        child: Text(
-                                                          'Add New Todo',
-                                                          style: kStyle(
-                                                            size: 15,
-                                                            color: textColor,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                icon: Icon(AntDesign.addfile),
+                                                label: Text(
+                                                  'New ToDo',
                                                 ),
                                               ),
-                                            )
-                                          : ListView.separated(
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) {
-                                                final _todo =
-                                                    model.todos[index];
-
-                                                return FadeIn(
-                                                  duration: Duration(
-                                                      milliseconds: 700),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          height: sy(127),
+                                          child: model.todos.isEmpty
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      model.update(
+                                                          sideBarSignal:
+                                                              SideBarSignal
+                                                                  .AddTodo);
+                                                    },
                                                     child: Container(
                                                       //  height: sy(120),
                                                       width: sy(180),
@@ -309,45 +265,25 @@ class _HomeViewState extends MomentumState<HomeView> {
                                                         children: [
                                                           Align(
                                                             alignment: Alignment
-                                                                .topRight,
-                                                            child: CustomButton(
-                                                              constraints: 30,
-                                                              iconSize: 13,
-                                                              icon: AntDesign
-                                                                  .delete,
-                                                              tooltip:
-                                                                  'delete todo',
-                                                              onPressed: () {
-                                                                model.controller
-                                                                    .sendTodoDeleteSignal(
-                                                                        index);
-                                                              },
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 20),
-                                                          Text(
-                                                            _todo.todo,
-                                                            style: kStyle(
-                                                              size: 15,
-                                                              color: whiteColor,
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: Text(
-                                                              DateFormat(
-                                                                      'dd-MMM-yyyy')
-                                                                  .format(
-                                                                _todo.createdOn
-                                                                    .toDateTime(),
-                                                              ),
-                                                              style: kStyle(
-                                                                size: 11,
+                                                                .center,
+                                                            child: Center(
+                                                              child: Icon(
+                                                                AntDesign
+                                                                    .pluscircle,
                                                                 color:
                                                                     textColor,
-                                                                italize: true,
+                                                                size: sy(40),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 30),
+                                                          Center(
+                                                            child: Text(
+                                                              'Add New Todo',
+                                                              style: kStyle(
+                                                                size: 15,
+                                                                color:
+                                                                    textColor,
                                                               ),
                                                             ),
                                                           ),
@@ -355,447 +291,595 @@ class _HomeViewState extends MomentumState<HomeView> {
                                                       ),
                                                     ),
                                                   ),
-                                                );
-                                              },
-                                              separatorBuilder: (_, index) =>
-                                                  SizedBox(width: sy(20)),
-                                              itemCount: model.todos.length,
+                                                )
+                                              : ListView.separated(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final _todo =
+                                                        model.todos[index];
+
+                                                    return FadeIn(
+                                                      duration: Duration(
+                                                          milliseconds: 700),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(left: 10),
+                                                        child: Container(
+                                                          //  height: sy(120),
+                                                          width: sy(180),
+                                                          padding: EdgeInsets.all(
+                                                              defaultPadding),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                secondaryColor,
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                        .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            10)),
+                                                          ),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topRight,
+                                                                child:
+                                                                    CustomButton(
+                                                                  constraints:
+                                                                      30,
+                                                                  iconSize: 13,
+                                                                  icon: AntDesign
+                                                                      .delete,
+                                                                  tooltip:
+                                                                      'delete todo',
+                                                                  onPressed:
+                                                                      () {
+                                                                    model
+                                                                        .controller
+                                                                        .sendTodoDeleteSignal(
+                                                                            index);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 20),
+                                                              Text(
+                                                                _todo.todo,
+                                                                style: kStyle(
+                                                                  size: 13.5,
+                                                                  color:
+                                                                      whiteColor,
+                                                                ),
+                                                              ),
+                                                              Spacer(),
+                                                              Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(
+                                                                  DateFormat(
+                                                                          'dd-MMM-yyyy')
+                                                                      .format(
+                                                                    _todo
+                                                                        .createdOn
+                                                                        .toDateTime(),
+                                                                  ),
+                                                                  style: kStyle(
+                                                                    size: 11,
+                                                                    color:
+                                                                        textColor,
+                                                                    italize:
+                                                                        true,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  separatorBuilder: (_,
+                                                          index) =>
+                                                      SizedBox(width: sy(20)),
+                                                  itemCount: model.todos.length,
+                                                ),
+                                        ),
+                                        SizedBox(height: sy(40)),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'My LogBooks',
+                                              style: kStyle(
+                                                size: sy(25),
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                    ),
-                                    SizedBox(height: sy(40)),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'My LogBooks',
-                                          style: kStyle(
-                                            size: sy(25),
-                                            color: Colors.white,
-                                          ),
+                                            Spacer(),
+                                            SlideInLeft(
+                                              child: CustomButton(
+                                                constraints: 30,
+                                                radius: 10,
+                                                iconSize: 13,
+                                                backgroundColor: secondaryColor,
+                                                icon: Entypo.grid,
+                                                tooltip:
+                                                    'show entries in staggered gridview mode',
+                                                onPressed: () {
+                                                  // show staggered grid view
+                                                  model.update(
+                                                      viewMode: ViewMode.Grid);
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(width: sy(25)),
+                                            SlideInDown(
+                                              child: CustomButton(
+                                                constraints: 30,
+                                                radius: 10,
+                                                iconSize: 13,
+                                                backgroundColor: secondaryColor,
+                                                icon: Entypo.list,
+                                                tooltip:
+                                                    'show entries in list view mode',
+                                                onPressed: () {
+                                                  // show list view
+                                                  model.update(
+                                                      viewMode: ViewMode.List);
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(width: sy(25)),
+                                            SlideInRight(
+                                              child: CustomButton(
+                                                constraints: 30,
+                                                radius: 10,
+                                                iconSize: 13,
+                                                backgroundColor: secondaryColor,
+                                                icon: Entypo.plus,
+                                                tooltip: 'add new entry',
+                                                onPressed: () {
+                                                  model.update(
+                                                      sideBarSignal:
+                                                          SideBarSignal
+                                                              .AddLogBook);
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Spacer(),
-                                        SlideInLeft(
-                                          child: CustomButton(
-                                            constraints: 30,
-                                            radius: 10,
-                                            iconSize: 13,
-                                            backgroundColor: secondaryColor,
-                                            icon: Entypo.grid,
-                                            tooltip:
-                                                'show entries in staggered gridview mode',
-                                            onPressed: () {
-                                              // show staggered grid view
-                                              model.update(
-                                                  viewMode: ViewMode.Grid);
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: sy(25)),
-                                        SlideInDown(
-                                          child: CustomButton(
-                                            constraints: 30,
-                                            radius: 10,
-                                            iconSize: 13,
-                                            backgroundColor: secondaryColor,
-                                            icon: Entypo.list,
-                                            tooltip:
-                                                'show entries in list view mode',
-                                            onPressed: () {
-                                              // show list view
-                                              model.update(
-                                                  viewMode: ViewMode.List);
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: sy(25)),
-                                        SlideInRight(
-                                          child: CustomButton(
-                                            constraints: 30,
-                                            radius: 10,
-                                            iconSize: 13,
-                                            backgroundColor: secondaryColor,
-                                            icon: Entypo.plus,
-                                            tooltip: 'add new entry',
-                                            onPressed: () {
-                                              model.update(
-                                                  sideBarSignal:
-                                                      SideBarSignal.AddLogBook);
-                                            },
-                                          ),
-                                        ),
+                                        SizedBox(height: 20),
+                                        model.logBooks.isEmpty
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    model.update(
+                                                        sideBarSignal:
+                                                            SideBarSignal
+                                                                .AddLogBook);
+                                                  },
+                                                  child: Container(
+                                                    height: sy(150),
+                                                    width: sy(180),
+                                                    padding: EdgeInsets.all(
+                                                        defaultPadding),
+                                                    decoration: BoxDecoration(
+                                                      color: secondaryColor,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  10)),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(height: 20),
+                                                        Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Center(
+                                                            child: Icon(
+                                                              Entypo.open_book,
+                                                              color: textColor,
+                                                              size: sy(40),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 30),
+                                                        Center(
+                                                          child: Text(
+                                                            'Add New LogBook Entry',
+                                                            style: kStyle(
+                                                              size: 15,
+                                                              color: textColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : model.viewMode == ViewMode.List
+                                                ? ListView.separated(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final _logEntry =
+                                                          model.logBooks[index];
+
+                                                      return SlideInUp(
+                                                        child: ConstrainedBox(
+                                                          constraints:
+                                                              BoxConstraints(
+                                                            maxHeight: sy(120),
+                                                            minHeight: sy(80),
+                                                          ),
+                                                          child: Container(
+                                                            padding: EdgeInsets.all(
+                                                                defaultPadding),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  secondaryColor,
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                          .all(
+                                                                      Radius.circular(
+                                                                          10)),
+                                                            ),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    CustomButton(
+                                                                        icon: Entypo
+                                                                            .eye,
+                                                                        tooltip:
+                                                                            'view more details',
+                                                                        onPressed:
+                                                                            () {
+                                                                          model
+                                                                              .update(
+                                                                            sideBarSignal:
+                                                                                SideBarSignal.ViewLogBook,
+                                                                            editLogBook:
+                                                                                _logEntry,
+                                                                          );
+                                                                        }),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            15),
+                                                                    CustomButton(
+                                                                      icon: Entypo
+                                                                          .edit,
+                                                                      tooltip:
+                                                                          'edit and update entry',
+                                                                      onPressed:
+                                                                          () {
+                                                                        model
+                                                                            .update(
+                                                                          sideBarSignal:
+                                                                              SideBarSignal.EditLogBook,
+                                                                          editLogBook:
+                                                                              _logEntry,
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            15),
+                                                                    CustomButton(
+                                                                      icon: AntDesign
+                                                                          .delete,
+                                                                      tooltip:
+                                                                          'delete logbook entry',
+                                                                      onPressed:
+                                                                          () {
+                                                                        model
+                                                                            .controller
+                                                                            .sendLogDeleteSignal(index);
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    CircleAvatar(
+                                                                      backgroundColor:
+                                                                          bgColor,
+                                                                      radius:
+                                                                          sy(30),
+                                                                      child:
+                                                                          Icon(
+                                                                        Entypo
+                                                                            .book,
+                                                                        color:
+                                                                            textColor,
+                                                                        size: sy(
+                                                                            30),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: sy(
+                                                                            8)),
+                                                                    AutoSizeText(
+                                                                      _logEntry
+                                                                          .workdone,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      minFontSize:
+                                                                          15,
+                                                                      maxFontSize:
+                                                                          15,
+                                                                      style:
+                                                                          kStyle(
+                                                                        size:
+                                                                            15,
+                                                                        color:
+                                                                            whiteColor,
+                                                                      ),
+                                                                      maxLines:
+                                                                          4,
+                                                                      softWrap:
+                                                                          true,
+                                                                      // overflowReplacement:Text('...'),
+                                                                    ),
+                                                                    Spacer(),
+                                                                    Text(
+                                                                      DateFormat(
+                                                                              'dd-MMM-yyyy')
+                                                                          .format(
+                                                                        _logEntry
+                                                                            .date
+                                                                            .toDateTime(),
+                                                                      ),
+                                                                      style:
+                                                                          kStyle(
+                                                                        size:
+                                                                            13,
+                                                                        color:
+                                                                            textColor,
+                                                                        italize:
+                                                                            true,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    separatorBuilder:
+                                                        (_, index) => SizedBox(
+                                                            height: sy(25)),
+                                                    itemCount:
+                                                        model.logBooks.length,
+                                                  )
+                                                : StaggeredGridView
+                                                    .countBuilder(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    crossAxisCount: 3,
+                                                    crossAxisSpacing: sy(30),
+                                                    mainAxisSpacing: sy(40),
+                                                    itemCount:
+                                                        model.logBooks.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final _logEntry =
+                                                          model.logBooks[index];
+
+                                                      return ZoomIn(
+                                                        child: Container(
+                                                          // height: sy(120),
+                                                          // width: sy(180),
+                                                          padding: EdgeInsets.all(
+                                                              defaultPadding),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                secondaryColor,
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                        .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            10)),
+                                                          ),
+                                                          child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 5,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        _logEntry
+                                                                            .workdone,
+                                                                        // overflow: TextOverflow.ellipsis,
+                                                                        minFontSize:
+                                                                            15,
+                                                                        maxFontSize:
+                                                                            15,
+                                                                        style:
+                                                                            kStyle(
+                                                                          size:
+                                                                              15,
+                                                                          color:
+                                                                              whiteColor,
+                                                                        ),
+                                                                        maxLines:
+                                                                            8,
+                                                                        softWrap:
+                                                                            true,
+                                                                        // overflowReplacement:Text('...'),
+                                                                      ),
+                                                                    ),
+                                                                    Spacer(),
+                                                                    Text(
+                                                                      DateFormat(
+                                                                              'dd-MMM-yyyy')
+                                                                          .format(
+                                                                        _logEntry
+                                                                            .date
+                                                                            .toDateTime(),
+                                                                      ),
+                                                                      style:
+                                                                          kStyle(
+                                                                        size:
+                                                                            13,
+                                                                        color:
+                                                                            textColor,
+                                                                        italize:
+                                                                            true,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 15),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    OverflowView(
+                                                                  direction: Axis
+                                                                      .vertical,
+                                                                  spacing: 4,
+                                                                  children: [
+                                                                    CustomButton(
+                                                                        icon: Entypo
+                                                                            .eye,
+                                                                        tooltip:
+                                                                            'view more details',
+                                                                        onPressed:
+                                                                            () {
+                                                                          model
+                                                                              .update(
+                                                                            sideBarSignal:
+                                                                                SideBarSignal.ViewLogBook,
+                                                                            editLogBook:
+                                                                                _logEntry,
+                                                                          );
+                                                                        }),
+                                                                    CustomButton(
+                                                                      icon: Entypo
+                                                                          .edit,
+                                                                      tooltip:
+                                                                          'edit and update entry',
+                                                                      onPressed:
+                                                                          () {
+                                                                        model
+                                                                            .update(
+                                                                          sideBarSignal:
+                                                                              SideBarSignal.EditLogBook,
+                                                                          editLogBook:
+                                                                              _logEntry,
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                    CustomButton(
+                                                                      icon: AntDesign
+                                                                          .delete,
+                                                                      tooltip:
+                                                                          'delete logbook entry',
+                                                                      onPressed:
+                                                                          () {
+                                                                        model
+                                                                            .controller
+                                                                            .sendLogDeleteSignal(index);
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                  builder: (context,
+                                                                      remaining) {
+                                                                    return CircleAvatar(
+                                                                      child: Text(
+                                                                          '+$remaining',
+                                                                          style:
+                                                                              kStyle(
+                                                                            size:
+                                                                                12,
+                                                                          )),
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      maxRadius:
+                                                                          8,
+                                                                      minRadius:
+                                                                          8,
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    staggeredTileBuilder:
+                                                        (index) {
+                                                      return StaggeredTile
+                                                          .count(
+                                                              1,
+                                                              index.isEven
+                                                                  ? 0.6
+                                                                  : 0.65);
+                                                    },
+                                                  ),
+                                        SizedBox(height: sy(30)),
                                       ],
                                     ),
-                                    SizedBox(height: 20),
-                                    model.logBooks.isEmpty
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: InkWell(
-                                              onTap: () {
-                                                model.update(
-                                                    sideBarSignal: SideBarSignal
-                                                        .AddLogBook);
-                                              },
-                                              child: Container(
-                                                height: sy(150),
-                                                width: sy(180),
-                                                padding: EdgeInsets.all(
-                                                    defaultPadding),
-                                                decoration: BoxDecoration(
-                                                  color: secondaryColor,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(10)),
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(height: 20),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Center(
-                                                        child: Icon(
-                                                          Entypo.open_book,
-                                                          color: textColor,
-                                                          size: sy(40),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 30),
-                                                    Center(
-                                                      child: Text(
-                                                        'Add New LogBook Entry',
-                                                        style: kStyle(
-                                                          size: 15,
-                                                          color: textColor,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : model.viewMode == ViewMode.List
-                                            ? ListView.separated(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                itemBuilder: (context, index) {
-                                                  final _logEntry =
-                                                      model.logBooks[index];
-
-                                                  return SlideInUp(
-                                                    child: ConstrainedBox(
-                                                      constraints:
-                                                          BoxConstraints(
-                                                        maxHeight: sy(120),
-                                                        minHeight: sy(80),
-                                                      ),
-                                                      child: Container(
-                                                        padding: EdgeInsets.all(
-                                                            defaultPadding),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: secondaryColor,
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                      .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                        ),
-                                                        child: Column(
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                CustomButton(
-                                                                    icon: Entypo
-                                                                        .eye,
-                                                                    tooltip:
-                                                                        'view more details',
-                                                                    onPressed:
-                                                                        () {
-                                                                      model
-                                                                          .update(
-                                                                        sideBarSignal:
-                                                                            SideBarSignal.ViewLogBook,
-                                                                        editLogBook:
-                                                                            _logEntry,
-                                                                      );
-                                                                    }),
-                                                                SizedBox(
-                                                                    width: 15),
-                                                                CustomButton(
-                                                                  icon: Entypo
-                                                                      .edit,
-                                                                  tooltip:
-                                                                      'edit and update entry',
-                                                                  onPressed:
-                                                                      () {
-                                                                    model
-                                                                        .update(
-                                                                      sideBarSignal:
-                                                                          SideBarSignal
-                                                                              .EditLogBook,
-                                                                      editLogBook:
-                                                                          _logEntry,
-                                                                    );
-                                                                  },
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 15),
-                                                                CustomButton(
-                                                                  icon: AntDesign
-                                                                      .delete,
-                                                                  tooltip:
-                                                                      'delete logbook entry',
-                                                                  onPressed:
-                                                                      () {
-                                                                    model
-                                                                        .controller
-                                                                        .sendLogDeleteSignal(
-                                                                            index);
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                CircleAvatar(
-                                                                  backgroundColor:
-                                                                      bgColor,
-                                                                  radius:
-                                                                      sy(30),
-                                                                  child: Icon(
-                                                                    Entypo.book,
-                                                                    color:
-                                                                        textColor,
-                                                                    size:
-                                                                        sy(30),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    width:
-                                                                        sy(8)),
-                                                                AutoSizeText(
-                                                                  _logEntry
-                                                                      .workdone,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  minFontSize:
-                                                                      15,
-                                                                  maxFontSize:
-                                                                      15,
-                                                                  style: kStyle(
-                                                                    size: 15,
-                                                                    color:
-                                                                        whiteColor,
-                                                                  ),
-                                                                  maxLines: 4,
-                                                                  softWrap:
-                                                                      true,
-                                                                  // overflowReplacement:Text('...'),
-                                                                ),
-                                                                Spacer(),
-                                                                Text(
-                                                                  DateFormat(
-                                                                          'dd-MMM-yyyy')
-                                                                      .format(
-                                                                    _logEntry
-                                                                        .date
-                                                                        .toDateTime(),
-                                                                  ),
-                                                                  style: kStyle(
-                                                                    size: 13,
-                                                                    color:
-                                                                        textColor,
-                                                                    italize:
-                                                                        true,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                separatorBuilder: (_, index) =>
-                                                    SizedBox(height: sy(25)),
-                                                itemCount:
-                                                    model.logBooks.length,
-                                              )
-                                            : StaggeredGridView.countBuilder(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                crossAxisCount: 3,
-                                                crossAxisSpacing: sy(30),
-                                                mainAxisSpacing: sy(40),
-                                                itemCount:
-                                                    model.logBooks.length,
-                                                itemBuilder: (context, index) {
-                                                  final _logEntry =
-                                                      model.logBooks[index];
-
-                                                  return ZoomIn(
-                                                    child: Container(
-                                                      // height: sy(120),
-                                                      // width: sy(180),
-                                                      padding: EdgeInsets.all(
-                                                          defaultPadding),
-                                                      decoration: BoxDecoration(
-                                                        color: secondaryColor,
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                      ),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 5,
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Expanded(
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    _logEntry
-                                                                        .workdone,
-                                                                    // overflow: TextOverflow.ellipsis,
-                                                                    minFontSize:
-                                                                        15,
-                                                                    maxFontSize:
-                                                                        15,
-                                                                    style:
-                                                                        kStyle(
-                                                                      size: 15,
-                                                                      color:
-                                                                          whiteColor,
-                                                                    ),
-                                                                    maxLines: 8,
-                                                                    softWrap:
-                                                                        true,
-                                                                    // overflowReplacement:Text('...'),
-                                                                  ),
-                                                                ),
-                                                                Spacer(),
-                                                                Text(
-                                                                  DateFormat(
-                                                                          'dd-MMM-yyyy')
-                                                                      .format(
-                                                                    _logEntry
-                                                                        .date
-                                                                        .toDateTime(),
-                                                                  ),
-                                                                  style: kStyle(
-                                                                    size: 13,
-                                                                    color:
-                                                                        textColor,
-                                                                    italize:
-                                                                        true,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 15),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Column(
-                                                              children: [
-                                                                CustomButton(
-                                                                    icon: Entypo
-                                                                        .eye,
-                                                                    tooltip:
-                                                                        'view more details',
-                                                                    onPressed:
-                                                                        () {
-                                                                      model
-                                                                          .update(
-                                                                        sideBarSignal:
-                                                                            SideBarSignal.ViewLogBook,
-                                                                        editLogBook:
-                                                                            _logEntry,
-                                                                      );
-                                                                    }),
-                                                                SizedBox(
-                                                                    height: 15),
-                                                                CustomButton(
-                                                                  icon: Entypo
-                                                                      .edit,
-                                                                  tooltip:
-                                                                      'edit and update entry',
-                                                                  onPressed:
-                                                                      () {
-                                                                    model
-                                                                        .update(
-                                                                      sideBarSignal:
-                                                                          SideBarSignal
-                                                                              .EditLogBook,
-                                                                      editLogBook:
-                                                                          _logEntry,
-                                                                    );
-                                                                  },
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 15),
-                                                                CustomButton(
-                                                                  icon: AntDesign
-                                                                      .delete,
-                                                                  tooltip:
-                                                                      'delete logbook entry',
-                                                                  onPressed:
-                                                                      () {
-                                                                    model
-                                                                        .controller
-                                                                        .sendLogDeleteSignal(
-                                                                            index);
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                staggeredTileBuilder: (index) {
-                                                  return StaggeredTile.count(1,
-                                                      index.isEven ? 0.6 : 0.8);
-                                                },
-                                              ),
-                                  ],
-                                ),
+                                  ),
+                                  model.sideBarSignal == SideBarSignal.None
+                                      ? SizedBox.shrink()
+                                      : SizedBox(width: 20),
+                                  model.sideBarSignal == SideBarSignal.None
+                                      ? SizedBox.shrink()
+                                      : Expanded(
+                                          flex: 2,
+                                          child: Column(
+                                            children: [
+                                              sidebarWidget(),
+                                            ],
+                                          ),
+                                        ),
+                                ],
                               ),
-                              model.sideBarSignal == SideBarSignal.None
-                                  ? SizedBox.shrink()
-                                  : SizedBox(width: 20),
-                              model.sideBarSignal == SideBarSignal.None
-                                  ? SizedBox.shrink()
-                                  : Expanded(
-                                      flex: 2,
-                                      child: sidebarWidget(),
-                                    ),
-                            ],
-                          ),
-                        );
-                },
+                            ),
+                          );
+                  },
+                ),
               ),
             );
           },
@@ -915,7 +999,7 @@ class _HomeViewState extends MomentumState<HomeView> {
 
       case SideBarSignal.AddLogBook:
         w = SlideInRight(
-                  child: Padding(
+          child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
               padding: EdgeInsets.all(defaultPadding),
@@ -1055,7 +1139,7 @@ class _HomeViewState extends MomentumState<HomeView> {
 
       case SideBarSignal.EditLogBook:
         w = SlideInRight(
-                  child: Padding(
+          child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
               padding: EdgeInsets.all(defaultPadding),
@@ -1080,7 +1164,8 @@ class _HomeViewState extends MomentumState<HomeView> {
                     TextEntryField(
                       title: 'Logged On',
                       initialText: DateFormat('dd-MMM-yyyy').format(
-                          model.editLogBook.date.toDateTime() ?? DateTime.now()),
+                          model.editLogBook.date.toDateTime() ??
+                              DateTime.now()),
                     ),
                     SizedBox(height: 30),
                     formEntryField(
@@ -1174,7 +1259,7 @@ class _HomeViewState extends MomentumState<HomeView> {
 
       case SideBarSignal.ViewLogBook:
         w = SlideInRight(
-                  child: Padding(
+          child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
               padding: EdgeInsets.all(defaultPadding),

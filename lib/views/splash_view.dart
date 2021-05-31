@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:relative_scale/relative_scale.dart';
@@ -17,9 +16,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends MomentumState<SplashView> {
-  void _setFullscreen() async {
-    await DesktopWindow.setFullScreen(true);
-  }
+
 
   _startTimer() {
     Duration duration = const Duration(milliseconds: 3000);
@@ -33,8 +30,6 @@ class _SplashViewState extends MomentumState<SplashView> {
 
   @override
   void initMomentumState() {
-    // set full screen window
-    _setFullscreen();
     _startTimer();
     super.initMomentumState();
   }

@@ -1,7 +1,20 @@
-![logo](assets/images/log-book.png)
+![logo](assets/images/app_icon.png)
 # LogBook Desktop App
 
 an internship log book desktop app
+
+## Table of contents
+- [LogBook Desktop App](#logbook-desktop-app)
+  - [Table of contents](#table-of-contents)
+  - [Features](#features)
+  - [Log Book Format](#log-book-format)
+  - [Demo](#demo)
+  - [Screenshots](#screenshots)
+  - [Change Log](#change-log)
+  - [Plugins](#plugins)
+  - [Appreciation](#appreciation)
+  - [Made with Flutter 💙](#made-with-flutter-)
+    - [Ico ref](#ico-ref)
 
 ## Features
 - [x] Create quick ToDos
@@ -10,37 +23,41 @@ an internship log book desktop app
 - [x] View added logbooks in grid / list view
 - [x] Generate and print all logbooks
 
+<br>
+
+## Log Book Format
+| Date       	| Work Done                                                                                                  	| Signature 	|
+|------------	|-----------------------------------------------------------------------------------------------------------	|-----------	|
+| 10/12/2020 	| - Learnt about Java Spring Boot<br>- Initialized a simple Book App in spring<br>- Learnt about Git as VCS 	|           	|
+| 04/01/2021 	| - Helped supervisor to set up windows OS<br>- Learnt about vitualization                                  	|           	|
+|            	|                                                                                                           	|           	|
+
+<br>
+
+## Demo
+- watch short demo [video here](assets/screenshots/demo.mp4)
+![demo](assets/screenshots/demo.gif)
+
+<br>
+<br>
+
 ## Screenshots
 ![home](assets/screenshots/home.png)
 ![new](assets/screenshots/new-entry.png)
 ![todo](assets/screenshots/new-todo.png)
 
+## Change Log
+- see [change log](CHANGELOG.md)
+
 ## Plugins
-- Momentum (State management)
-- Sembast (Database)
-
-- *Developed on &/ for Windows OS
-
-### Made with Flutter 💙
-
+- [Momentum](https://github.com/xamantra/momentum) (State management)
+- [Sembast](https://github.com/tekartik/sembast.dart) (Database)
 
 ## Appreciation
 - Star the repo if you like this piece of work
 - Want to expand it per your needs, Fork the repo
 
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Made with Flutter 💙
 
 ### Ico ref
 ico generated from [crello](https://crello.com/home/)

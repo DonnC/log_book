@@ -26,9 +26,19 @@ class PdfGenView extends StatelessWidget {
       //),
       //headerHeight: 25,
       //cellHeight: 40,
+      columnWidths: {
+        0: pw.FixedColumnWidth(70.0), // fixed to 100 width
+        1: pw.FlexColumnWidth(),
+        2: pw.FixedColumnWidth(80.0), //fixed to 100 width
+      },
       cellAlignments: {
-        0: pw.Alignment.centerLeft,
+        0: pw.Alignment.center,
         1: pw.Alignment.centerLeft,
+        2: pw.Alignment.center,
+      },
+      headerAlignments: {
+        0: pw.Alignment.center,
+        1: pw.Alignment.center,
         2: pw.Alignment.center,
       },
       headerStyle: pw.TextStyle(
@@ -68,37 +78,39 @@ class PdfGenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Log Book Preview'),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
+      child: CustomAppBar(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Log Book Preview'),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () => MomentumRouter.pop(context),
             ),
-            onPressed: () => MomentumRouter.pop(context),
           ),
-        ),
-        body: RelativeBuilder(builder: (context, height, width, sy, sx) {
-          return MomentumBuilder(
-              controllers: [PdfPrinterViewController],
-              builder: (context, snapshot) {
-                final model = snapshot<PdfPrinterViewModel>();
+          body: RelativeBuilder(builder: (context, height, width, sy, sx) {
+            return MomentumBuilder(
+                controllers: [PdfPrinterViewController],
+                builder: (context, snapshot) {
+                  final model = snapshot<PdfPrinterViewModel>();
 
-                return model.loading
-                    ? Center(
-                        child: customLoader(
-                          heightFromTop: height * 0.3,
-                          loaderType: 2,
-                          loaderText: 'loading log book preview..',
-                        ),
-                      )
-                    : PdfPreview(
-                        allowSharing: false,
-                        build: (format) =>
-                            _generatePdf(format, model.logBookEntries),
-                      );
-              });
-        }),
+                  return model.loading
+                      ? Center(
+                          child: customLoader(
+                            heightFromTop: height * 0.3,
+                            loaderType: 2,
+                            loaderText: 'loading log book preview..',
+                          ),
+                        )
+                      : PdfPreview(
+                          allowSharing: false,
+                          build: (format) =>
+                              _generatePdf(format, model.logBookEntries),
+                        );
+                });
+          }),
+        ),
       ),
     );
   }

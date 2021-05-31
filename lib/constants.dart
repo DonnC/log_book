@@ -4,7 +4,7 @@
 // a random num generator
 import 'dart:math';
 
-const String version = 'v1.0.0';
+const String version = 'v2.0.0';
 
 final Random _random = Random();
 
@@ -67,11 +67,3 @@ class EncryptionDatabaseCodec {
   String get backUpKey => _externalFileKey;
   bool get encryptionEnabled => _enableEncryption;
 }
-
-/// get a random number
-int randomNumber() => _random.nextInt(99999).abs() - _random.nextInt(9739);
-
-int randomNumberSmall() => _random.nextInt(100).abs() + _random.nextInt(99);
-
-/// token secret word
-const String secretWord = 'DC';
