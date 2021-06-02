@@ -52,6 +52,7 @@ an internship log book desktop app
 ## Plugins
 - [Momentum](https://github.com/xamantra/momentum) (State management)
 - [Sembast](https://github.com/tekartik/sembast.dart) (Database)
+- [Bitsdojo Window](https://pub.dev/packages/bitsdojo_window) (Window Customization)
 
 ## Appreciation
 - Star the repo if you like this piece of work
