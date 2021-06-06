@@ -1,6 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences_windows/shared_preferences_windows.dart';
 
 import 'package:log_book/components/index.dart';
@@ -16,8 +17,8 @@ void main() async {
   // only allow persistence per session
   // to avoid persisting views with issues
   await sharedPref.clear();
+  await dotenv.load();
   runApp(momentum());
-
   doWhenWindowReady(() {
     final win = appWindow;
 
@@ -56,6 +57,7 @@ Momentum momentum() => Momentum(
         AppService(),
         MomentumRouter(
           [
+            GithubStatsView(),
             SplashView(),
             HomeView(),
             PdfGenView(),

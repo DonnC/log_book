@@ -46,6 +46,9 @@ dependencies:
   flutter_spinkit: ^5.0.0
   overflow_view: ^0.3.1
 
+  # github
+  github: ^8.1.1
+
   #window_size:
   #  git:
   #    url: git://github.com/google/flutter-desktop-embedding.git
@@ -54,9 +57,7 @@ dependencies:
 
   bitsdojo_window: ^0.1.0+1
 
-  # db encryption
-  encrypt: '>=5.0.0-0'
-  crypto: '>=3.0.0'
+  flutter_dotenv: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +76,7 @@ flutter:
 
   assets:
     - assets/images/
+    - .env
   
   fonts:
     - family: NunitoSans
