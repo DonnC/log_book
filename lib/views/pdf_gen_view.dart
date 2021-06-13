@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:momentum/momentum.dart';
 import 'package:pdf/pdf.dart';
@@ -58,7 +59,20 @@ class PdfGenView extends StatelessWidget {
 
   Future<Uint8List> _generatePdf(
       PdfPageFormat format, List<List> dataRecords) async {
-    final pdf = pw.Document();
+    final regular = pw.Font.ttf(
+        await rootBundle.load("assets/fonts/NunitoSans-Regular.ttf"));
+    final bold =
+        pw.Font.ttf(await rootBundle.load("assets/fonts/NunitoSans-Bold.ttf"));
+    final italic = pw.Font.ttf(
+        await rootBundle.load("assets/fonts/NunitoSans-Italic.ttf"));
+
+    final pdf = pw.Document(
+      theme: pw.ThemeData.withFont(
+        base: regular,
+        bold: bold,
+        italic: italic,
+      ),
+    );
 
     pdf.addPage(
       pw.MultiPage(
