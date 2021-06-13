@@ -75,6 +75,10 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/fonts/NunitoSans-Bold.ttf
+    - assets/fonts/NunitoSans-Italic.ttf
+    - assets/fonts/NunitoSans-Light.ttf
+    - assets/fonts/NunitoSans-Regular.ttf
   
   fonts:
     - family: NunitoSans
